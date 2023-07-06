@@ -8,8 +8,11 @@ import starter.utils.Constants;
 import java.io.File;
 
 public class ReqresAPI {
-    public static String GET_LIST_USERS = Constants.BASE_URL+"/api/users?page={page}";
-    public static String POST_CREATE_USER = Constants.BASE_URL+"/api/users";
+    public static String BASE_PATH_API_USERS = Constants.BASE_URL+"/api/users";
+    public static String GET_LIST_USERS = BASE_PATH_API_USERS+"?page={page}";
+//    public static String POST_CREATE_USER = Constants.BASE_URL+"/api/users";
+    public static String PUT_UPDATE_USER = BASE_PATH_API_USERS+"/{id}";
+    public static String DELETE_USER = BASE_PATH_API_USERS+"/{id}";
 
     @Step("Get list users")
     public void getListUsers(int page){
@@ -21,5 +24,17 @@ public class ReqresAPI {
         SerenityRest.given()
                 .contentType(ContentType.JSON)
                 .body(json);
+    }
+    @Step("Put update user")
+    public void putUpdateUser(int id, File json){
+        SerenityRest.given()
+                .pathParam("id", id)
+                .contentType(ContentType.JSON)
+                .body(json);
+    }
+    @Step("Delete user")
+    public void deleteUser(int id){
+        SerenityRest.given()
+                .pathParam("id",id);
     }
 }

@@ -47,7 +47,7 @@ public class ReqresStepDef {
 
     @When("Send request post create user")
     public void sendRequestPostCreateUser() {
-        SerenityRest.when().post(ReqresAPI.POST_CREATE_USER);
+        SerenityRest.when().post(ReqresAPI.BASE_PATH_API_USERS);
     }
 
     @Then("Status code should be {int} created")
@@ -60,5 +60,33 @@ public class ReqresStepDef {
         SerenityRest.and()
                 .body(ReqresResponses.NAME,equalTo(name))
                 .body(ReqresResponses.JOB,equalTo(job));
+    }
+
+    //put update user
+    @Given("Put update user with valid id {int} and json")
+    public void putUpdateUserWithValidIdIdAndJson(int id) {
+        File json = new File(Constants.REQ_BODY+"/UpdateUser.json");
+        reqresAPI.putUpdateUser(id, json);
+    }
+
+    @When("Send request put update user")
+    public void sendRequestPutUpdateUser() {
+        SerenityRest.when().put(ReqresAPI.PUT_UPDATE_USER);
+    }
+
+    //delete user
+    @Given("Delete user with valid id {int}")
+    public void deleteUserWithValidIdId(int id) {
+        reqresAPI.deleteUser(id);
+    }
+
+    @When("Send request delete user")
+    public void sendRequestDeleteUser() {
+        SerenityRest.when().delete(ReqresAPI.DELETE_USER);
+    }
+
+    @Then("Status code should be {int} No Content")
+    public void statusCodeShouldBeNoContent(int noContent) {
+        SerenityRest.then().statusCode(noContent);
     }
 }
