@@ -5,6 +5,10 @@ Feature: API Automation Testing ALTA QE Batch 11
     When Send request get list users
     Then Status code should be 200 OK
     And Response body page value should be <page>
+    And Validate get list user JSON schema
+    And Print if status code 200 OK
+    And Get log all
+    And Get log body
     Examples:
       |page  |
       |1     |

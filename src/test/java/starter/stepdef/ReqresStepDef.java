@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import net.serenitybdd.rest.SerenityRest;
 import net.thucydides.core.annotations.Steps;
 import starter.reqres.ReqresAPI;
@@ -17,6 +18,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class ReqresStepDef {
     @Steps
     ReqresAPI reqresAPI;
+
     //get list users
     @Given("Get list user with valid parameter page {int}")
     public void getListUserWithValidParameterPage(int page) {
@@ -35,13 +37,34 @@ public class ReqresStepDef {
 
     @And("Response body page value should be {int}")
     public void responseBodyPageValueShouldBePage(int page) {
-        SerenityRest.and().body(ReqresResponses.PAGE,equalTo(page));
+        SerenityRest.and().body(ReqresResponses.PAGE, equalTo(page));
+    }
+
+    @And("Validate get list user JSON schema")
+    public void validateGetListUserJSONSchema() {
+        File json = new File(Constants.JSON_SCHEMA + "/ListUsersSchema.json");
+        SerenityRest.and().assertThat().body(JsonSchemaValidator.matchesJsonSchema(json));
+    }
+
+    @And("Get log body")
+    public void getLogBody() {
+        SerenityRest.and().log().body();
+    }
+
+    @And("Get log all")
+    public void getLogAll() {
+        SerenityRest.and().log().all();
+    }
+
+    @And("Print if status code {int} OK")
+    public void printIfStatusCodeOK(int ok) {
+        SerenityRest.and().log().ifStatusCodeIsEqualTo(ok);
     }
 
     //post create new user
     @Given("Post create user with valid json")
     public void postCreateUserWithValidJson() {
-        File json = new File(Constants.REQ_BODY+"/User.json");
+        File json = new File(Constants.REQ_BODY + "/User.json");
         reqresAPI.postCreateUser(json);
     }
 
@@ -58,14 +81,14 @@ public class ReqresStepDef {
     @And("Response body name was {string} and job was {string}")
     public void responseBodyNameWasAndJobWas(String name, String job) {
         SerenityRest.and()
-                .body(ReqresResponses.NAME,equalTo(name))
-                .body(ReqresResponses.JOB,equalTo(job));
+                .body(ReqresResponses.NAME, equalTo(name))
+                .body(ReqresResponses.JOB, equalTo(job));
     }
 
     //put update user
     @Given("Put update user with valid id {int} and json")
     public void putUpdateUserWithValidIdIdAndJson(int id) {
-        File json = new File(Constants.REQ_BODY+"/UpdateUser.json");
+        File json = new File(Constants.REQ_BODY + "/UpdateUser.json");
         reqresAPI.putUpdateUser(id, json);
     }
 
